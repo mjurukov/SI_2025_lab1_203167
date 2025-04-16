@@ -91,9 +91,21 @@ class TaskManager {
 
     // 6. Find the highest-priority unfinished task
     public List<Task> getMostUrgentTasks() {
-        // TODO: Implement logic to find most urgent tasks
-        return new ArrayList<>();
-    }
+    List<Task> unfinished = tasks.stream()
+            .filter(task -> !task.isCompleted())
+            .toList();
+
+    if (unfinished.isEmpty()) return List.of();
+
+    Priority highest = unfinished.stream()
+            .map(Task::getPriority)
+            .max(Comparator.naturalOrder())
+            .orElse(Priority.LOW);
+
+    return unfinished.stream()
+            .filter(task -> task.getPriority() == highest)
+            .toList();
+	}
 
     // 7. Count tasks per category
     public Map<String, Integer> countTasksPerCategory() {
